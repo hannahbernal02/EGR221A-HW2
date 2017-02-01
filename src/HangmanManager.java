@@ -82,7 +82,7 @@ public class HangmanManager {
         guessedLetters.add(guess);
 
         Map<String, TreeSet<String>> wordFamilyMap = buildMap(guess);
-        choosePattern (wordFamilyMap, wordSet, guess);
+        wordSet = choosePattern (wordFamilyMap, wordSet, guess);
         for (int i = 0; i < wordPattern.length(); i++) {
             if (wordPattern.charAt(i) == guess) {
                 count++;
@@ -127,7 +127,7 @@ public class HangmanManager {
     }
 
     //This helper method chooses the pattern that will be current by comparing its set size to others
-    private void choosePattern(Map<String, TreeSet<String>> wordFamilyMap, Set<String> wordSet, char guess) {
+    private Set<String> choosePattern(Map<String, TreeSet<String>> wordFamilyMap, Set<String> wordSet, char guess) {
         int setSize = -1;
         for (String key: wordFamilyMap.keySet()) {
             //check size of values
@@ -137,7 +137,7 @@ public class HangmanManager {
                 wordSet = wordFamilyMap.get(key);
             }
         }
-        System.out.println(wordSet);
+        return wordSet;
     }
 
 
