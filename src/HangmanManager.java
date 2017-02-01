@@ -45,8 +45,8 @@ public class HangmanManager {
     }
 
     //Method returns the set of words available
-    public Set<String> words()    {
-        return wordSet;
+    public Set<String> words() {
+        return new TreeSet<>(wordSet);
     }
 
     //Method returns how many guesses player has left
@@ -56,7 +56,7 @@ public class HangmanManager {
 
     //Method returns current set of letters guessed by user
     public SortedSet<Character> guesses() {
-        return guessedLetters;
+        return new TreeSet<>(guessedLetters);
 
     }
 
@@ -71,7 +71,6 @@ public class HangmanManager {
     //Method records the users guess and changes the current set of words and pattern
     public int record(char guess) {
         int count = 0;
-        int setSize = -1;
         if (numOfGuesses < 1 || wordSet.isEmpty()) {
             throw new IllegalStateException();
         }
@@ -82,13 +81,12 @@ public class HangmanManager {
         guessedLetters.add(guess);
 
         Map<String, TreeSet<String>> wordFamilyMap = buildMap(guess);
-        wordSet = choosePattern (wordFamilyMap, wordSet, guess);
+        wordSet = choosePattern(wordFamilyMap, wordSet, guess);
         for (int i = 0; i < wordPattern.length(); i++) {
             if (wordPattern.charAt(i) == guess) {
                 count++;
             }
         }
-
         if (count == 0) {
             numOfGuesses--;
         }
@@ -97,12 +95,12 @@ public class HangmanManager {
     }
 
     //Helper method builds a map mapping the patterns to their respective word families
-    private Map<String, TreeSet<String>> buildMap(char guess){
+    private Map<String, TreeSet<String>> buildMap(char guess) {
         // String newPattern = "";
         Map<String, TreeSet<String>> wordFamilyMap = new TreeMap<>();
         for (String word : wordSet) {
             String key = getKey(word, guess);
-            if(wordFamilyMap.containsKey(key)) {
+            if (wordFamilyMap.containsKey(key)) {
                 TreeSet<String> wordSet = wordFamilyMap.get(key);
                 wordSet.add(word);
             } else {
@@ -120,7 +118,7 @@ public class HangmanManager {
         for (int i = 0; i < word.length(); i++) {
             if (word.charAt(i) == guess) {
                 //word is found so will put guessed letter at found index
-                sb.setCharAt(i*2, guess);
+                sb.setCharAt(i * 2, guess);
             }
         }
         return sb.toString();
@@ -129,7 +127,7 @@ public class HangmanManager {
     //This helper method chooses the pattern that will be current by comparing its set size to others
     private Set<String> choosePattern(Map<String, TreeSet<String>> wordFamilyMap, Set<String> wordSet, char guess) {
         int setSize = -1;
-        for (String key: wordFamilyMap.keySet()) {
+        for (String key : wordFamilyMap.keySet()) {
             //check size of values
             if (wordFamilyMap.get(key).size() > setSize) { //is biggest set
                 setSize = wordFamilyMap.get(key).size();
@@ -139,17 +137,4 @@ public class HangmanManager {
         }
         return wordSet;
     }
-
-
-//    //comparePatterns(wordPattern,key);
-//
-//    private int comparePatterns (String wordPattern, String key) {
-//        int count = 0;
-//        for (int i = 0; i < key.length(); i += 2) {
-//            if (wordPattern.charAt(i) != key.charAt(i)) {
-//                count++;
-//            }
-//        }
-//        return count;
-//    }
 }
